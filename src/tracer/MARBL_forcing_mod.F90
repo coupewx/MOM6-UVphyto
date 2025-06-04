@@ -32,6 +32,17 @@ type, private :: marbl_forcing_diag_ids
   integer :: atm_bc          !< Atmospheric black carbon component of iron_flux
   integer :: ice_dust        !< Sea-ice dust component of dust_flux
   integer :: ice_bc          !< Sea-ice black carbon component of iron_flux
+  ! COUPE ADDED EPHYTO{1,6,7}UV{A,B,C}_NET
+  integer :: EPHYTO1UVA_NET
+  integer :: EPHYTO1UVB_NET
+  integer :: EPHYTO1UVC_NET
+  integer :: EPHYTO6UVA_NET
+  integer :: EPHYTO6UVB_NET
+  integer :: EPHYTO6UVC_NET
+  integer :: EPHYTO7UVA_NET
+  integer :: EPHYTO7UVB_NET
+  integer :: EPHYTO7UVC_NET
+
 end type marbl_forcing_diag_ids
 
 !> Control structure for this module
@@ -177,6 +188,37 @@ contains
         CS%diag%axesT1, & ! T=> tracer grid? 1 => no vertical grid
         day, "SEAICE_BLACK_CARBON_FLUX from cpl", "kg/m^2/s")
 
+! COUPE ADDED EPHYTO{1,6,7}UV{A,B,C}_NET
+    CS%diag_ids%EPHYTO1UVA_NET = register_diag_field("ocean_model", "ATM_EPHYTO1UVA_NET_CPL", &
+        CS%diag%axesT1, & ! T=> tracer grid? 1 => no vertical grid
+        day, "ATM_EPHYTO1UVA_NET_CPL from cpl",  "unitless")
+    CS%diag_ids%EPHYTO1UVB_NET = register_diag_field("ocean_model", "ATM_EPHYTO1UVB_NET_CPL", &
+        CS%diag%axesT1, & ! T=> tracer grid? 1 => no vertical grid
+        day, "ATM_EPHYTO1UVB_NET_CPL from cpl",  "unitless")
+    CS%diag_ids%EPHYTO1UVC_NET = register_diag_field("ocean_model", "ATM_EPHYTO1UVC_NET_CPL", &
+        CS%diag%axesT1, & ! T=> tracer grid? 1 => no vertical grid
+        day, "ATM_EPHYTO1UVC_NET_CPL from cpl",  "unitless")
+
+    CS%diag_ids%EPHYTO6UVA_NET = register_diag_field("ocean_model", "ATM_EPHYTO6UVA_NET_CPL", &
+        CS%diag%axesT1, & ! T=> tracer grid? 1 => no vertical grid
+        day, "ATM_EPHYTO6UVA_NET_CPL from cpl",  "unitless")
+    CS%diag_ids%EPHYTO6UVB_NET = register_diag_field("ocean_model", "ATM_EPHYTO6UVB_NET_CPL", &
+        CS%diag%axesT1, & ! T=> tracer grid? 1 => no vertical grid
+        day, "ATM_EPHYTO6UVB_NET_CPL from cpl",  "unitless")
+    CS%diag_ids%EPHYTO6UVC_NET = register_diag_field("ocean_model", "ATM_EPHYTO6UVC_NET_CPL", &
+        CS%diag%axesT1, & ! T=> tracer grid? 1 => no vertical grid
+        day, "ATM_EPHYTO6UVC_NET_CPL from cpl",  "unitless")
+
+    CS%diag_ids%EPHYTO7UVA_NET = register_diag_field("ocean_model", "ATM_EPHYTO7UVA_NET_CPL", &
+        CS%diag%axesT1, & ! T=> tracer grid? 1 => no vertical grid
+        day, "ATM_EPHYTO7UVA_NET_CPL from cpl",  "unitless")
+    CS%diag_ids%EPHYTO7UVB_NET = register_diag_field("ocean_model", "ATM_EPHYTO7UVB_NET_CPL", &
+        CS%diag%axesT1, & ! T=> tracer grid? 1 => no vertical grid
+        day, "ATM_EPHYTO7UVB_NET_CPL from cpl",  "unitless")
+    CS%diag_ids%EPHYTO7UVC_NET = register_diag_field("ocean_model", "ATM_EPHYTO7UVC_NET_CPL", &
+        CS%diag%axesT1, & ! T=> tracer grid? 1 => no vertical grid
+        day, "ATM_EPHYTO7UVC_NET_CPL from cpl",  "unitless")
+
   end subroutine MARBL_forcing_init
 
   ! Note: ice fraction and u10_sqr are handled in mom_surface_forcing because of CFCs
@@ -184,7 +226,10 @@ contains
                                                seaice_dust_flux, atm_bc_flux, seaice_bc_flux, &
                                                nhx_dep, noy_dep, atm_co2_prog, atm_co2_diag, &
                                                afracr, swnet_afracr, ifrac_n, &
-                                               swpen_ifrac_n, Time, G, US, i0, j0, fluxes, CS)
+                                               swpen_ifrac_n, Time, G, US, i0, j0, fluxes, CS, &
+                                                EPHYTO1UVA_NET,EPHYTO1UVB_NET,EPHYTO1UVC_NET, &
+                                                EPHYTO6UVA_NET,EPHYTO6UVB_NET,EPHYTO6UVC_NET, &
+                                                EPHYTO7UVA_NET,EPHYTO7UVB_NET,EPHYTO7UVC_NET)
 
     real, dimension(:,:),   pointer, intent(in)    :: atm_fine_dust_flux   !< atmosphere fine dust flux from IOB
                                                                            !! [kg m-2 s-1]
@@ -218,6 +263,19 @@ contains
     type(forcing),                   intent(inout) :: fluxes               !< MARBL-specific forcing fields
     type(marbl_forcing_CS), pointer, intent(inout) :: CS                   !< A pointer that is set to point to
                                                                            !! control structure for MARBL forcing
+    ! coupe added ephyto terms for uv inhibition
+    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO1UVA_NET_FLUX
+    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO1UVB_NET_FLUX
+    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO1UVC_NET_FLUX
+    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO6UVA_NET_FLUX
+    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO6UVB_NET_FLUX
+    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO6UVC_NET_FLUX
+    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO7UVA_NET_FLUX
+    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO7UVB_NET_FLUX
+    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO7UVC_NET_FLUX
+
+
+
 
     integer :: i, j, is, ie, js, je, m
     real :: atm_fe_bioavail_frac     !< Fraction of iron from the atmosphere available for biological uptake [1]
@@ -251,6 +309,39 @@ contains
           mask=G%mask2dT(is:ie,js:je))
     if (CS%diag_ids%ice_bc > 0) &
       call post_data(CS%diag_ids%ice_bc, seaice_bc_flux(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
+          mask=G%mask2dT(is:ie,js:je))
+
+! COUPE ADDED EPHYTO TERMS FOR UV INHIBITION
+    if (CS%diag_ids%EPHYTO1UVA_NET > 0) &
+      call post_data(CS%diag_ids%EPHYTO1UVA_NET, EPHYTO1UVA_NET_FLUX(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
+          mask=G%mask2dT(is:ie,js:je))
+    if (CS%diag_ids%EPHYTO1UVB_NET > 0) &
+      call post_data(CS%diag_ids%EPHYTO1UVB_NET, EPHYTO1UVA_NET_FLUX(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
+          mask=G%mask2dT(is:ie,js:je))
+    if (CS%diag_ids%EPHYTO1UVC_NET > 0) &
+      call post_data(CS%diag_ids%EPHYTO1UVC_NET, EPHYTO1UVC_NET_FLUX(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
+          mask=G%mask2dT(is:ie,js:je))
+
+! COUPE ADDED EPHYTO TERMS FOR UV INHIBITION
+    if (CS%diag_ids%EPHYTO6UVA_NET > 0) &
+      call post_data(CS%diag_ids%EPHYTO6UVA_NET, EPHYTO6UVA_NET_FLUX(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
+          mask=G%mask2dT(is:ie,js:je))
+    if (CS%diag_ids%EPHYTO6UVB_NET > 0) &
+      call post_data(CS%diag_ids%EPHYTO6UVB_NET, EPHYTO6UVA_NET_FLUX(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
+          mask=G%mask2dT(is:ie,js:je))
+    if (CS%diag_ids%EPHYTO6UVC_NET > 0) &
+      call post_data(CS%diag_ids%EPHYTO6UVC_NET, EPHYTO6UVC_NET_FLUX(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
+          mask=G%mask2dT(is:ie,js:je))
+
+! COUPE ADDED EPHYTO TERMS FOR UV INHIBITION
+    if (CS%diag_ids%EPHYTO7UVA_NET > 0) &
+      call post_data(CS%diag_ids%EPHYTO7UVA_NET, EPHYTO7UVA_NET_FLUX(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
+          mask=G%mask2dT(is:ie,js:je))
+    if (CS%diag_ids%EPHYTO7UVB_NET > 0) &
+      call post_data(CS%diag_ids%EPHYTO7UVB_NET, EPHYTO7UVA_NET_FLUX(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
+          mask=G%mask2dT(is:ie,js:je))
+    if (CS%diag_ids%EPHYTO7UVC_NET > 0) &
+      call post_data(CS%diag_ids%EPHYTO7UVC_NET, EPHYTO7UVC_NET_FLUX(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
           mask=G%mask2dT(is:ie,js:je))
 
     do j=js,je ; do i=is,ie
