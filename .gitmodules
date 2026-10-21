@@ -4,3 +4,24 @@
 [submodule "pkg/GSW-Fortran"]
 	path = pkg/GSW-Fortran
 	url = https://github.com/mom-ocean/GSW-Fortran.git
+
+[submodule "MOM6"]
+  path = MOM6
+  url = https://github.com/NCAR/MOM6.git
+  fxDONOTUSEurl = https://github.com/NCAR/MOM6.git
+    fxtag = dev/ncar_250616
+    fxrequired = AlwaysRequired
+
+[submodule "stochastic_physics"]
+  path = externals/stochastic_physics
+  url = https://github.com/ESCOMP/stochastic_physics.git
+  fxDONOTUSEurl = https://github.com/ESCOMP/stochastic_physics.git
+    fxtag = fcb_0.0.1
+    fxrequired = AlwaysRequired
+
+[submodule "MARBL"]
+  path = externals/MARBL
+  url = https://github.com/marbl-ecosys/MARBL.git
+  fxDONOTUSEurl = https://github.com/marbl-ecosys/MARBL.git
+    fxtag = marbl0.48.2
+    fxrequired = AlwaysRequired
