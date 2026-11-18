@@ -64,31 +64,6 @@ type, public :: marbl_forcing_CS ; private
 
 end type marbl_forcing_CS
 
-!> Control structure for this module
-type, public :: marbl_forcing_CS ; private
-  type(diag_ctrl), pointer :: diag => NULL() !< A structure that is used to
-                                             !! regulate the timing of diagnostic output.
-
-  real    :: dust_ratio_thres               !< coarse/fine dust ratio threshold [1]
-  real    :: min_dust_ratio                 !< minimum value for dust ratio [1]
-  real    :: dust_ratio_offset              !< offset for dust ratio [1]
-  real    :: fe_bioavail_frac_offset        !< offset for iron bioavailability fraction [1]
-  real    :: atm_fe_to_bc_ratio             !< atmospheric iron to black carbon ratio [1]
-  real    :: seaice_fe_to_bc_ratio          !< sea-ice iron to black carbon ratio [1]
-  real    :: iron_frac_in_atm_fine_dust     !< Fraction of fine dust from the atmosphere that is iron [1]
-  real    :: iron_frac_in_atm_coarse_dust   !< Fraction of coarse dust from the atmosphere that is iron [1]
-  real    :: iron_frac_in_seaice_dust       !< Fraction of dust from the sea ice that is iron [1]
-  real    :: atm_co2_const                  !< atmospheric CO2 (if specifying a constant value) [ppm]
-  real    :: atm_alt_co2_const              !< alternate atmospheric CO2 for _ALT_CO2 tracers
-                                            !! (if specifying a constant value) [ppm]
-
-  logical :: use_MARBL_tracers    !< most functions can return immediately
-                                  !! MARBL tracers are turned off
-  integer :: atm_co2_iopt         !< Integer version of atm_co2_opt, which determines source of atm_co2
-  integer :: atm_alt_co2_iopt     !< Integer version of atm_alt_co2_opt, which determines source of atm_alt_co2
-
-end type marbl_forcing_CS
-
 ! Module parameters
 integer, parameter :: atm_co2_constant_iopt = 0     !< module parameter denoting atm_co2_opt = 'constant'
 integer, parameter :: atm_co2_prognostic_iopt = 1   !< module parameter denoting atm_co2_opt = 'diagnostic'
