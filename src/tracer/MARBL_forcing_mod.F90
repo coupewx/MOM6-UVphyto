@@ -55,9 +55,9 @@ type, public :: marbl_forcing_CS ; private
   integer :: EPHYTO1UVA_NET
   integer :: EPHYTO1UVB_NET
   integer :: EPHYTO1UVC_NET
-  integer :: EPHYTO6UVA_NET
-  integer :: EPHYTO6UVB_NET
-  integer :: EPHYTO6UVC_NET
+  integer :: EPHYTO5UVA_NET
+  integer :: EPHYTO5UVB_NET
+  integer :: EPHYTO5UVC_NET
   integer :: EPHYTO7UVA_NET
   integer :: EPHYTO7UVB_NET
   integer :: EPHYTO7UVC_NET
@@ -191,7 +191,7 @@ contains
                                                afracr, swnet_afracr, ifrac_n, &
                                                swpen_ifrac_n, Time, G, US, i0, j0, fluxes, CS, &
                                                 EPHYTO1UVA_NET_FLUX,EPHYTO1UVB_NET_FLUX,EPHYTO1UVC_NET_FLUX, &
-                                                EPHYTO6UVA_NET_FLUX,EPHYTO6UVB_NET_FLUX,EPHYTO6UVC_NET_FLUX, &
+                                                EPHYTO5UVA_NET_FLUX,EPHYTO5UVB_NET_FLUX,EPHYTO5UVC_NET_FLUX, &
                                                 EPHYTO7UVA_NET_FLUX,EPHYTO7UVB_NET_FLUX,EPHYTO7UVC_NET_FLUX)
 
     real, dimension(:,:),   pointer, intent(in)    :: atm_fine_dust_flux   !< atmosphere fine dust flux from IOB
@@ -230,9 +230,9 @@ contains
     real, dimension(:,:,:), pointer, intent(in) :: EPHYTO1UVA_NET_FLUX
     real, dimension(:,:,:), pointer, intent(in) :: EPHYTO1UVB_NET_FLUX
     real, dimension(:,:,:), pointer, intent(in) :: EPHYTO1UVC_NET_FLUX
-    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO6UVA_NET_FLUX
-    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO6UVB_NET_FLUX
-    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO6UVC_NET_FLUX
+    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO5UVA_NET_FLUX
+    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO5UVB_NET_FLUX
+    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO5UVC_NET_FLUX
     real, dimension(:,:,:), pointer, intent(in) :: EPHYTO7UVA_NET_FLUX
     real, dimension(:,:,:), pointer, intent(in) :: EPHYTO7UVB_NET_FLUX
     real, dimension(:,:,:), pointer, intent(in) :: EPHYTO7UVC_NET_FLUX
