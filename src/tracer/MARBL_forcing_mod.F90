@@ -245,15 +245,15 @@ contains
       fluxes%noy_dep(i,j) = (G%mask2dT(i,j) * ndep_conversion) * noy_dep(i-i0,j-j0)
 
      ! UV inhibition
-     fluxes%EPHYTO1UVA_NET_FLUX = (G%mask2dT(i,j)) * EPHYTO1UVA_NET_FLUX(i-i0,j-j0)
-     fluxes%EPHYTO1UVB_NET_FLUX = (G%mask2dT(i,j)) * EPHYTO1UVB_NET_FLUX(i-i0,j-j0)
-     fluxes%EPHYTO1UVC_NET_FLUX = (G%mask2dT(i,j)) * EPHYTO1UVC_NET_FLUX(i-i0,j-j0)
-     fluxes%EPHYTO5UVA_NET_FLUX = (G%mask2dT(i,j)) * EPHYTO5UVA_NET_FLUX(i-i0,j-j0)
-     fluxes%EPHYTO5UVB_NET_FLUX = (G%mask2dT(i,j)) * EPHYTO5UVB_NET_FLUX(i-i0,j-j0)
-     fluxes%EPHYTO5UVC_NET_FLUX = (G%mask2dT(i,j)) * EPHYTO5UVC_NET_FLUX(i-i0,j-j0)
-     fluxes%EPHYTO7UVA_NET_FLUX = (G%mask2dT(i,j)) * EPHYTO7UVA_NET_FLUX(i-i0,j-j0)
-     fluxes%EPHYTO7UVB_NET_FLUX = (G%mask2dT(i,j)) * EPHYTO7UVB_NET_FLUX(i-i0,j-j0)
-     fluxes%EPHYTO7UVC_NET_FLUX = (G%mask2dT(i,j)) * EPHYTO7UVC_NET_FLUX(i-i0,j-j0)
+     fluxes%EPHYTO1UVA_NET_FLUX(:,:) = (G%mask2dT(i,j)) * EPHYTO1UVA_NET_FLUX(i-i0,j-j0)
+     fluxes%EPHYTO1UVB_NET_FLUX(:,:) = (G%mask2dT(i,j)) * EPHYTO1UVB_NET_FLUX(i-i0,j-j0)
+     fluxes%EPHYTO1UVC_NET_FLUX(:,:) = (G%mask2dT(i,j)) * EPHYTO1UVC_NET_FLUX(i-i0,j-j0)
+     fluxes%EPHYTO5UVA_NET_FLUX(:,:) = (G%mask2dT(i,j)) * EPHYTO5UVA_NET_FLUX(i-i0,j-j0)
+     fluxes%EPHYTO5UVB_NET_FLUX(:,:) = (G%mask2dT(i,j)) * EPHYTO5UVB_NET_FLUX(i-i0,j-j0)
+     fluxes%EPHYTO5UVC_NET_FLUX(:,:) = (G%mask2dT(i,j)) * EPHYTO5UVC_NET_FLUX(i-i0,j-j0)
+     fluxes%EPHYTO7UVA_NET_FLUX(:,:) = (G%mask2dT(i,j)) * EPHYTO7UVA_NET_FLUX(i-i0,j-j0)
+     fluxes%EPHYTO7UVB_NET_FLUX(:,:) = (G%mask2dT(i,j)) * EPHYTO7UVB_NET_FLUX(i-i0,j-j0)
+     fluxes%EPHYTO7UVC_NET_FLUX(:,:) = (G%mask2dT(i,j)) * EPHYTO7UVC_NET_FLUX(i-i0,j-j0)
     enddo ; enddo
 
     ! Atmospheric CO2
