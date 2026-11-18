@@ -442,9 +442,9 @@ if (associated(ice_ocean_boundary%EPHYTO1UVA_NET)) then
     if (ChkErr(rc,__LINE__,u_FILE_u)) return
   endif
 
-if (associated(ice_ocean_boundary%EPHYTO6UVA_NET)) then
-    call state_getimport(importState, 'Sa_ephyto6UVA',  &
-        isc, iec, jsc, jec, ice_ocean_boundary%EPHYTO6UVA_NET(:,:), &
+if (associated(ice_ocean_boundary%EPHYTO5UVA_NET)) then
+    call state_getimport(importState, 'Sa_ephyto5UVA',  &
+        isc, iec, jsc, jec, ice_ocean_boundary%EPHYTO5UVA_NET(:,:), &
         areacor=med2mod_areacor, rc=rc)
     if (ChkErr(rc,__LINE__,u_FILE_u)) return
   endif
@@ -464,9 +464,9 @@ if (associated(ice_ocean_boundary%EPHYTO1UVB_NET)) then
     if (ChkErr(rc,__LINE__,u_FILE_u)) return
   endif
 
-if (associated(ice_ocean_boundary%EPHYTO6UVB_NET)) then
-    call state_getimport(importState, 'Sa_ephyto6UVB',  &
-        isc, iec, jsc, jec, ice_ocean_boundary%EPHYTO6UVB_NET(:,:), &
+if (associated(ice_ocean_boundary%EPHYTO5UVB_NET)) then
+    call state_getimport(importState, 'Sa_ephyto5UVB',  &
+        isc, iec, jsc, jec, ice_ocean_boundary%EPHYTO5UVB_NET(:,:), &
         areacor=med2mod_areacor, rc=rc)
     if (ChkErr(rc,__LINE__,u_FILE_u)) return
   endif
@@ -486,9 +486,9 @@ if (associated(ice_ocean_boundary%EPHYTO1UVC_NET)) then
     if (ChkErr(rc,__LINE__,u_FILE_u)) return
   endif
 
-if (associated(ice_ocean_boundary%EPHYTO6UVC_NET)) then
-    call state_getimport(importState, 'Sa_ephyto6UVC',  &
-        isc, iec, jsc, jec, ice_ocean_boundary%EPHYTO6UVC_NET(:,:), &
+if (associated(ice_ocean_boundary%EPHYTO5UVC_NET)) then
+    call state_getimport(importState, 'Sa_ephyto5UVC',  &
+        isc, iec, jsc, jec, ice_ocean_boundary%EPHYTO5UVC_NET(:,:), &
         areacor=med2mod_areacor, rc=rc)
     if (ChkErr(rc,__LINE__,u_FILE_u)) return
   endif
