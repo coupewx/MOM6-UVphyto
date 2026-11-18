@@ -1625,23 +1625,23 @@ subroutine MARBL_tracers_column_physics(h_old, ea, eb, fluxes, dt, G, GV, US, CS
         MARBL_instances%surface_flux_forcings(CS%d14c_ind)%field_0d(1) = CS%d14c(i,j)
 
       if (CS%ephyto1uva_ind > 0) &
-        MARBL_instances%surface_flux_forcings(CS%ephyto1uva_ind)%field_0d(1) = CS%ephyto1uva(i,j)
+        MARBL_instances%surface_flux_forcings(CS%ephyto1uva_ind)%field_0d(1) = fluxes%ephyto1uva(i,j)
       if (CS%ephyto1uvb_ind > 0) &
-        MARBL_instances%surface_flux_forcings(CS%ephyto1uvb_ind)%field_0d(1) = CS%ephyto1uvb(i,j)
+        MARBL_instances%surface_flux_forcings(CS%ephyto1uvb_ind)%field_0d(1) = fluxes%ephyto1uvb(i,j)
       if (CS%ephyto1uvc_ind > 0) &
-        MARBL_instances%surface_flux_forcings(CS%ephyto1uvc_ind)%field_0d(1) = CS%ephyto1uvc(i,j)
+        MARBL_instances%surface_flux_forcings(CS%ephyto1uvc_ind)%field_0d(1) = fluxes%ephyto1uvc(i,j)
       if (CS%ephyto5uva_ind > 0) &
-        MARBL_instances%surface_flux_forcings(CS%ephyto5uva_ind)%field_0d(1) = CS%ephyto5uva(i,j)
+        MARBL_instances%surface_flux_forcings(CS%ephyto5uva_ind)%field_0d(1) = fluxes%ephyto5uva(i,j)
       if (CS%ephyto5uvb_ind > 0) &
-        MARBL_instances%surface_flux_forcings(CS%ephyto5uvb_ind)%field_0d(1) = CS%ephyto5uvb(i,j)
+        MARBL_instances%surface_flux_forcings(CS%ephyto5uvb_ind)%field_0d(1) = fluxes%ephyto5uvb(i,j)
       if (CS%ephyto5uvc_ind > 0) &
-        MARBL_instances%surface_flux_forcings(CS%ephyto5uvc_ind)%field_0d(1) = CS%ephyto5uvc(i,j)
+        MARBL_instances%surface_flux_forcings(CS%ephyto5uvc_ind)%field_0d(1) = fluxes%ephyto5uvc(i,j)
       if (CS%ephyto7uva_ind > 0) &
-        MARBL_instances%surface_flux_forcings(CS%ephyto7uva_ind)%field_0d(1) = CS%ephyto7uva(i,j)
+        MARBL_instances%surface_flux_forcings(CS%ephyto7uva_ind)%field_0d(1) = fluxes%ephyto7uva(i,j)
       if (CS%ephyto7uvb_ind > 0) &
-        MARBL_instances%surface_flux_forcings(CS%ephyto7uvb_ind)%field_0d(1) = CS%ephyto7uvb(i,j)
+        MARBL_instances%surface_flux_forcings(CS%ephyto7uvb_ind)%field_0d(1) = fluxes%ephyto7uvb(i,j)
       if (CS%ephyto7uvc_ind > 0) &
-        MARBL_instances%surface_flux_forcings(CS%ephyto7uvc_ind)%field_0d(1) = CS%ephyto7uvc(i,j)
+        MARBL_instances%surface_flux_forcings(CS%ephyto7uvc_ind)%field_0d(1) = fluxes%ephyto7uvc(i,j)
 
       !     * tracers at surface
       !       TODO: average over some shallow depth (e.g. 5m)
