@@ -245,7 +245,16 @@ type, public :: forcing
     atm_coarse_dust_flux => NULL(),  & !< Coarse dust flux from atmosphere [R Z T-1 ~> kg m-2 s-1]
     seaice_dust_flux => NULL(),      & !< Dust flux from seaice [R Z T-1 ~> kg m-2 s-1]
     atm_bc_flux => NULL(),           & !< Black carbon flux from atmosphere [R Z T-1 ~> kg m-2 s-1]
-    seaice_bc_flux => NULL()           !< Black carbon flux from seaice [R Z T-1 ~> kg m-2 s-1]
+    seaice_bc_flux => NULL(),           !< Black carbon flux from seaice [R Z T-1 ~> kg m-2 s-1]
+    ephyto1UVA_NET_FLUX => NULL(),
+    ephyto1UVB_NET_FLUX => NULL(),
+    ephyto1UVC_NET_FLUX => NULL(),
+    ephyto5UVA_NET_FLUX => NULL(),
+    ephyto5UVB_NET_FLUX => NULL(),
+    ephyto5UVC_NET_FLUX => NULL(),
+    ephyto7UVA_NET_FLUX => NULL(),
+    ephyto7UVB_NET_FLUX => NULL(),
+    ephyto7UVC_NET_FLUX => NULL()
 
   real, pointer, dimension(:,:,:) :: &
     fracr_cat   => NULL(),           & !< per-category ice fraction [nondim]
@@ -2570,6 +2579,57 @@ subroutine fluxes_accumulate(flux_tmp, fluxes, G, wt2, forces)
       fluxes%noy_dep(i,j)  = wt1*fluxes%noy_dep(i,j) + wt2*flux_tmp%noy_dep(i,j)
     enddo ; enddo
   endif
+
+  ! UV
+  if (associated(fluxes%ephyto1UVA_NET_FLUX) .and. associated(flux_tmp%ephyto1UVA_NET_FLUX)) then
+    do j=jsd,jed ; do i=isd,ied
+      fluxes%ephyto1UVA_NET_FLUX(i,j)  = wt1*fluxes%ephyto1UVA_NET_FLUX(i,j) + wt2*flux_tmp%ephyto1UVA_NET_FLUX(i,j)
+    enddo ; enddo
+  endif
+  if (associated(fluxes%ephyto1UVB_NET_FLUX) .and. associated(flux_tmp%ephyto1UVB_NET_FLUX)) then
+    do j=jsd,jed ; do i=isd,ied
+      fluxes%ephyto1UVB_NET_FLUX(i,j)  = wt1*fluxes%ephyto1UVB_NET_FLUX(i,j) + wt2*flux_tmp%ephyto1UVB_NET_FLUX(i,j)
+    enddo ; enddo
+  endif
+  if (associated(fluxes%ephyto1UVC_NET_FLUX) .and. associated(flux_tmp%ephyto1UVC_NET_FLUX)) then
+    do j=jsd,jed ; do i=isd,ied
+      fluxes%ephyto1UVC_NET_FLUX(i,j)  = wt1*fluxes%ephyto1UVC_NET_FLUX(i,j) + wt2*flux_tmp%ephyto1UVC_NET_FLUX(i,j)
+    enddo ; enddo
+  endif
+
+  if (associated(fluxes%ephyto5UVA_NET_FLUX) .and. associated(flux_tmp%ephyto5UVA_NET_FLUX)) then
+    do j=jsd,jed ; do i=isd,ied
+      fluxes%ephyto5UVA_NET_FLUX(i,j)  = wt1*fluxes%ephyto5UVA_NET_FLUX(i,j) + wt2*flux_tmp%ephyto5UVA_NET_FLUX(i,j)
+    enddo ; enddo
+  endif
+  if (associated(fluxes%ephyto5UVB_NET_FLUX) .and. associated(flux_tmp%ephyto5UVB_NET_FLUX)) then
+    do j=jsd,jed ; do i=isd,ied
+      fluxes%ephyto5UVB_NET_FLUX(i,j)  = wt1*fluxes%ephyto5UVB_NET_FLUX(i,j) + wt2*flux_tmp%ephyto5UVB_NET_FLUX(i,j)
+    enddo ; enddo
+  endif
+  if (associated(fluxes%ephyto5UVC_NET_FLUX) .and. associated(flux_tmp%ephyto5UVC_NET_FLUX)) then
+    do j=jsd,jed ; do i=isd,ied
+      fluxes%ephyto5UVC_NET_FLUX(i,j)  = wt1*fluxes%ephyto5UVC_NET_FLUX(i,j) + wt2*flux_tmp%ephyto5UVC_NET_FLUX(i,j)
+    enddo ; enddo
+  endif
+
+  if (associated(fluxes%ephyto7UVA_NET_FLUX) .and. associated(flux_tmp%ephyto7UVA_NET_FLUX)) then
+    do j=jsd,jed ; do i=isd,ied
+      fluxes%ephyto7UVA_NET_FLUX(i,j)  = wt1*fluxes%ephyto7UVA_NET_FLUX(i,j) + wt2*flux_tmp%ephyto7UVA_NET_FLUX(i,j)
+    enddo ; enddo
+  endif
+  if (associated(fluxes%ephyto7UVB_NET_FLUX) .and. associated(flux_tmp%ephyto7UVB_NET_FLUX)) then
+    do j=jsd,jed ; do i=isd,ied
+      fluxes%ephyto7UVB_NET_FLUX(i,j)  = wt1*fluxes%ephyto7UVB_NET_FLUX(i,j) + wt2*flux_tmp%ephyto7UVB_NET_FLUX(i,j)
+    enddo ; enddo
+  endif
+  if (associated(fluxes%ephyto7UVC_NET_FLUX) .and. associated(flux_tmp%ephyto7UVC_NET_FLUX)) then
+    do j=jsd,jed ; do i=isd,ied
+      fluxes%ephyto7UVC_NET_FLUX(i,j)  = wt1*fluxes%ephyto7UVC_NET_FLUX(i,j) + wt2*flux_tmp%ephyto7UVC_NET_FLUX(i,j)
+    enddo ; enddo
+  endif
+
+
   if (associated(fluxes%atm_co2) .and. associated(flux_tmp%atm_co2)) then
     do j=jsd,jed ; do i=isd,ied
       fluxes%atm_co2(i,j)  = wt1*fluxes%atm_co2(i,j) + wt2*flux_tmp%atm_co2(i,j)
@@ -3695,6 +3755,18 @@ subroutine allocate_forcing_by_group(G, fluxes, water, heat, ustar, press, &
   call myAlloc(fluxes%seaice_dust_flux,isd,ied,jsd,jed, marbl)
   call myAlloc(fluxes%seaice_bc_flux,isd,ied,jsd,jed, marbl)
 
+  call myAlloc(fluxes%ephyto1UVA_NET_FLUX,isd,ied,jsd,jed, marbl)
+  call myAlloc(fluxes%ephyto1UVB_NET_FLUX,isd,ied,jsd,jed, marbl)
+  call myAlloc(fluxes%ephyto1UVC_NET_FLUX,isd,ied,jsd,jed, marbl)
+
+  call myAlloc(fluxes%ephyto5UVA_NET_FLUX,isd,ied,jsd,jed, marbl)
+  call myAlloc(fluxes%ephyto5UVB_NET_FLUX,isd,ied,jsd,jed, marbl)
+  call myAlloc(fluxes%ephyto5UVC_NET_FLUX,isd,ied,jsd,jed, marbl)
+
+  call myAlloc(fluxes%ephyto7UVA_NET_FLUX,isd,ied,jsd,jed, marbl)
+  call myAlloc(fluxes%ephyto7UVB_NET_FLUX,isd,ied,jsd,jed, marbl)
+  call myAlloc(fluxes%ephyto7UVC_NET_FLUX,isd,ied,jsd,jed, marbl)
+
   ! These fields should only be allocated when receiving multiple ice categories
   if (present(ice_ncat)) then
     call myAlloc(fluxes%fracr_cat,isd,ied,jsd,jed,1,ice_ncat+1, ice_ncat > 0)
@@ -4010,6 +4082,19 @@ subroutine deallocate_forcing_type(fluxes)
   if (associated(fluxes%seaice_bc_flux))       deallocate(fluxes%seaice_bc_flux)
   if (associated(fluxes%fracr_cat))            deallocate(fluxes%fracr_cat)
   if (associated(fluxes%qsw_cat))              deallocate(fluxes%qsw_cat)
+
+  if (associated(fluxes%ephyto1UVA_NET_FLUX))              deallocate(fluxes%ephyto1UVA_NET_FLUX)
+  if (associated(fluxes%ephyto1UVB_NET_FLUX))              deallocate(fluxes%ephyto1UVB_NET_FLUX)
+  if (associated(fluxes%ephyto1UVC_NET_FLUX))              deallocate(fluxes%ephyto1UVC_NET_FLUX)
+
+  if (associated(fluxes%ephyto5UVA_NET_FLUX))              deallocate(fluxes%ephyto5UVA_NET_FLUX)
+  if (associated(fluxes%ephyto5UVB_NET_FLUX))              deallocate(fluxes%ephyto5VB_NET_FLUX)
+  if (associated(fluxes%ephyto5UVC_NET_FLUX))              deallocate(fluxes%ephyto5VC_NET_FLUX)
+
+  if (associated(fluxes%ephyto7UVA_NET_FLUX))              deallocate(fluxes%ephyto7UVA_NET_FLUX)
+  if (associated(fluxes%ephyto7UVB_NET_FLUX))              deallocate(fluxes%ephyto7UVB_NET_FLUX)
+  if (associated(fluxes%ephyto7UVC_NET_FLUX))              deallocate(fluxes%ephyto7UVC_NET_FLUX)
+
 
   call coupler_type_destructor(fluxes%tr_fluxes)
 
