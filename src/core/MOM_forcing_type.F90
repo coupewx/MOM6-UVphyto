@@ -245,15 +245,15 @@ type, public :: forcing
     atm_coarse_dust_flux => NULL(),  & !< Coarse dust flux from atmosphere [R Z T-1 ~> kg m-2 s-1]
     seaice_dust_flux => NULL(),      & !< Dust flux from seaice [R Z T-1 ~> kg m-2 s-1]
     atm_bc_flux => NULL(),           & !< Black carbon flux from atmosphere [R Z T-1 ~> kg m-2 s-1]
-    seaice_bc_flux => NULL(),           !< Black carbon flux from seaice [R Z T-1 ~> kg m-2 s-1]
-    ephyto1UVA_NET_FLUX => NULL(),
-    ephyto1UVB_NET_FLUX => NULL(),
-    ephyto1UVC_NET_FLUX => NULL(),
-    ephyto5UVA_NET_FLUX => NULL(),
-    ephyto5UVB_NET_FLUX => NULL(),
-    ephyto5UVC_NET_FLUX => NULL(),
-    ephyto7UVA_NET_FLUX => NULL(),
-    ephyto7UVB_NET_FLUX => NULL(),
+    seaice_bc_flux => NULL(),        &  !< Black carbon flux from seaice [R Z T-1 ~> kg m-2 s-1]
+    ephyto1UVA_NET_FLUX => NULL(),   &
+    ephyto1UVB_NET_FLUX => NULL(),   &
+    ephyto1UVC_NET_FLUX => NULL(),   &
+    ephyto5UVA_NET_FLUX => NULL(),   &
+    ephyto5UVB_NET_FLUX => NULL(),   &
+    ephyto5UVC_NET_FLUX => NULL(),   &
+    ephyto7UVA_NET_FLUX => NULL(),   &
+    ephyto7UVB_NET_FLUX => NULL(),   &
     ephyto7UVC_NET_FLUX => NULL()
 
   real, pointer, dimension(:,:,:) :: &
