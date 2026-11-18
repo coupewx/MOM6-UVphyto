@@ -4088,8 +4088,8 @@ subroutine deallocate_forcing_type(fluxes)
   if (associated(fluxes%ephyto1UVC_NET_FLUX))              deallocate(fluxes%ephyto1UVC_NET_FLUX)
 
   if (associated(fluxes%ephyto5UVA_NET_FLUX))              deallocate(fluxes%ephyto5UVA_NET_FLUX)
-  if (associated(fluxes%ephyto5UVB_NET_FLUX))              deallocate(fluxes%ephyto5VB_NET_FLUX)
-  if (associated(fluxes%ephyto5UVC_NET_FLUX))              deallocate(fluxes%ephyto5VC_NET_FLUX)
+  if (associated(fluxes%ephyto5UVB_NET_FLUX))              deallocate(fluxes%ephyto5UVB_NET_FLUX)
+  if (associated(fluxes%ephyto5UVC_NET_FLUX))              deallocate(fluxes%ephyto5UVC_NET_FLUX)
 
   if (associated(fluxes%ephyto7UVA_NET_FLUX))              deallocate(fluxes%ephyto7UVA_NET_FLUX)
   if (associated(fluxes%ephyto7UVB_NET_FLUX))              deallocate(fluxes%ephyto7UVB_NET_FLUX)
