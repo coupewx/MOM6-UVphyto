@@ -216,9 +216,9 @@ type, public :: ice_ocean_boundary_type
   real, pointer, dimension(:,:) :: EPHYTO1UVA_NET       =>NULL() !< UV-A inhibition for diatoms [1]
   real, pointer, dimension(:,:) :: EPHYTO1UVB_NET       =>NULL() !< UV-B inhibition for diatoms [1]
   real, pointer, dimension(:,:) :: EPHYTO1UVC_NET       =>NULL() !< UV-C inhibition for diatoms [1]
-  real, pointer, dimension(:,:) :: EPHYTO6UVA_NET       =>NULL() !< UV-A inhibition for coccolithophores [1]
-  real, pointer, dimension(:,:) :: EPHYTO6UVB_NET       =>NULL() !< UV-B inhibition for coccolithophores [1]
-  real, pointer, dimension(:,:) :: EPHYTO6UVC_NET       =>NULL() !< UV-C inhibition for coccolithophores [1]
+  real, pointer, dimension(:,:) :: EPHYTO5UVA_NET       =>NULL() !< UV-A inhibition for coccolithophores [1]
+  real, pointer, dimension(:,:) :: EPHYTO5UVB_NET       =>NULL() !< UV-B inhibition for coccolithophores [1]
+  real, pointer, dimension(:,:) :: EPHYTO5UVC_NET       =>NULL() !< UV-C inhibition for coccolithophores [1]
   real, pointer, dimension(:,:) :: EPHYTO7UVA_NET       =>NULL() !< UV-A inhibition for small phytoplankton/diazotrophs [1]
   real, pointer, dimension(:,:) :: EPHYTO7UVB_NET       =>NULL() !< UV-B inhibition for small phytoplankton/diazotrophs [1]
   real, pointer, dimension(:,:) :: EPHYTO7UVC_NET       =>NULL() !< UV-C inhibition for small phytoplankton/diazotrophs [1]
@@ -665,7 +665,7 @@ subroutine convert_IOB_to_fluxes(IOB, fluxes, index_bounds, Time, valid_time, G,
                                            IOB%afracr, IOB%swnet_afracr, IOB%ifrac_n, IOB%swpen_ifrac_n, &
                                            Time, G, US, i0, j0, fluxes, CS%marbl_forcing_CSp, &
                                            IOB%EPHYTO1UVA_NET, IOB%EPHYTO1UVB_NET, IOB%EPHYTO1UVC_NET, &
-                                          IOB%EPHYTO6UVA_NET, IOB%EPHYTO6UVB_NET, IOB%EPHYTO6UVC_NET, &
+                                          IOB%EPHYTO5UVA_NET, IOB%EPHYTO5UVB_NET, IOB%EPHYTO5UVC_NET, &
                                            IOB%EPHYTO7UVA_NET, IOB%EPHYTO7UVB_NET, IOB%EPHYTO7UVC_NET)
 
   ! wave to ocean coupling
@@ -1733,17 +1733,17 @@ subroutine ice_ocn_bnd_type_chksum(id, timestep, iobt)
     if (root) write(outunit,110) 'iobt%EPHYTO1UVC_NET        ', chks
   endif
 
-  if (associated(iobt%EPHYTO6UVA_NET)) then
-    chks = field_chksum(iobt%EPHYTO6UVA_NET)
-    if (root) write(outunit,110) 'iobt%EPHYTO6UVA_NET        ', chks
+  if (associated(iobt%EPHYTO5UVA_NET)) then
+    chks = field_chksum(iobt%EPHYTO5UVA_NET)
+    if (root) write(outunit,110) 'iobt%EPHYTO5UVA_NET        ', chks
   endif
-  if (associated(iobt%EPHYTO6UVB_NET)) then
-    chks = field_chksum(iobt%EPHYTO6UVB_NET)
-    if (root) write(outunit,110) 'iobt%EPHYTO6UVB_NET        ', chks
+  if (associated(iobt%EPHYTO5UVB_NET)) then
+    chks = field_chksum(iobt%EPHYTO5UVB_NET)
+    if (root) write(outunit,110) 'iobt%EPHYTO5UVB_NET        ', chks
   endif
-  if (associated(iobt%EPHYTO6UVC_NET)) then
-    chks = field_chksum(iobt%EPHYTO6UVC_NET)
-    if (root) write(outunit,110) 'iobt%EPHYTO6UVC_NET        ', chks
+  if (associated(iobt%EPHYTO5UVC_NET)) then
+    chks = field_chksum(iobt%EPHYTO5UVC_NET)
+    if (root) write(outunit,110) 'iobt%EPHYTO5UVC_NET        ', chks
   endif
 
   if (associated(iobt%EPHYTO7UVA_NET)) then
