@@ -226,9 +226,9 @@ contains
                                                nhx_dep, noy_dep, atm_co2_prog, atm_co2_diag, &
                                                afracr, swnet_afracr, ifrac_n, &
                                                swpen_ifrac_n, Time, G, US, i0, j0, fluxes, CS, &
-                                                EPHYTO1UVA_NET,EPHYTO1UVB_NET,EPHYTO1UVC_NET, &
-                                                EPHYTO6UVA_NET,EPHYTO6UVB_NET,EPHYTO6UVC_NET, &
-                                                EPHYTO7UVA_NET,EPHYTO7UVB_NET,EPHYTO7UVC_NET)
+                                                EPHYTO1UVA_NET_FLUX,EPHYTO1UVB_NET_FLUX,EPHYTO1UVC_NET_FLUX, &
+                                                EPHYTO6UVA_NET_FLUX,EPHYTO6UVB_NET_FLUX,EPHYTO6UVC_NET_FLUX, &
+                                                EPHYTO7UVA_NET_FLUX,EPHYTO7UVB_NET_FLUX,EPHYTO7UVC_NET_FLUX)
 
     real, dimension(:,:),   pointer, intent(in)    :: atm_fine_dust_flux   !< atmosphere fine dust flux from IOB
                                                                            !! [kg m-2 s-1]
@@ -263,15 +263,15 @@ contains
     type(marbl_forcing_CS), pointer, intent(inout) :: CS                   !< A pointer that is set to point to
                                                                            !! control structure for MARBL forcing
     ! coupe added ephyto terms for uv inhibition
-    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO1UVA_NET
-    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO1UVB_NET
-    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO1UVC_NET
-    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO6UVA_NET
-    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO6UVB_NET
-    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO6UVC_NET
-    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO7UVA_NET
-    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO7UVB_NET
-    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO7UVC_NET
+    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO1UVA_NET_FLUX
+    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO1UVB_NET_FLUX
+    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO1UVC_NET_FLUX
+    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO6UVA_NET_FLUX
+    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO6UVB_NET_FLUX
+    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO6UVC_NET_FLUX
+    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO7UVA_NET_FLUX
+    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO7UVB_NET_FLUX
+    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO7UVC_NET_FLUX
 
 
 
@@ -313,35 +313,35 @@ contains
 
 ! COUPE ADDED EPHYTO TERMS FOR UV INHIBITION
     if (CS%diag_ids%EPHYTO1UVA_NET > 0) &
-      call post_data(CS%diag_ids%EPHYTO1UVA_NET, EPHYTO1UVA_NET(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
+      call post_data(CS%diag_ids%EPHYTO1UVA_NET, EPHYTO1UVA_NET_FLUX(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
           mask=G%mask2dT(is:ie,js:je))
     if (CS%diag_ids%EPHYTO1UVB_NET > 0) &
-      call post_data(CS%diag_ids%EPHYTO1UVB_NET, EPHYTO1UVA_NET(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
+      call post_data(CS%diag_ids%EPHYTO1UVB_NET, EPHYTO1UVA_NET_FLUX(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
           mask=G%mask2dT(is:ie,js:je))
     if (CS%diag_ids%EPHYTO1UVC_NET > 0) &
-      call post_data(CS%diag_ids%EPHYTO1UVC_NET, EPHYTO1UVC_NET(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
+      call post_data(CS%diag_ids%EPHYTO1UVC_NET, EPHYTO1UVC_NET_FLUX(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
           mask=G%mask2dT(is:ie,js:je))
 
 ! COUPE ADDED EPHYTO TERMS FOR UV INHIBITION
     if (CS%diag_ids%EPHYTO6UVA_NET > 0) &
-      call post_data(CS%diag_ids%EPHYTO6UVA_NET, EPHYTO6UVA_NET(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
+      call post_data(CS%diag_ids%EPHYTO6UVA_NET, EPHYTO6UVA_NET_FLUX(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
           mask=G%mask2dT(is:ie,js:je))
     if (CS%diag_ids%EPHYTO6UVB_NET > 0) &
-      call post_data(CS%diag_ids%EPHYTO6UVB_NET, EPHYTO6UVA_NET(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
+      call post_data(CS%diag_ids%EPHYTO6UVB_NET, EPHYTO6UVA_NET_FLUX(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
           mask=G%mask2dT(is:ie,js:je))
     if (CS%diag_ids%EPHYTO6UVC_NET > 0) &
-      call post_data(CS%diag_ids%EPHYTO6UVC_NET, EPHYTO6UVC_NET(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
+      call post_data(CS%diag_ids%EPHYTO6UVC_NET, EPHYTO6UVC_NET_FLUX(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
           mask=G%mask2dT(is:ie,js:je))
 
 ! COUPE ADDED EPHYTO TERMS FOR UV INHIBITION
     if (CS%diag_ids%EPHYTO7UVA_NET > 0) &
-      call post_data(CS%diag_ids%EPHYTO7UVA_NET, EPHYTO7UVA_NET(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
+      call post_data(CS%diag_ids%EPHYTO7UVA_NET, EPHYTO7UVA_NET_FLUX(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
           mask=G%mask2dT(is:ie,js:je))
     if (CS%diag_ids%EPHYTO7UVB_NET > 0) &
-      call post_data(CS%diag_ids%EPHYTO7UVB_NET, EPHYTO7UVA_NET(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
+      call post_data(CS%diag_ids%EPHYTO7UVB_NET, EPHYTO7UVA_NET_FLUX(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
           mask=G%mask2dT(is:ie,js:je))
     if (CS%diag_ids%EPHYTO7UVC_NET > 0) &
-      call post_data(CS%diag_ids%EPHYTO7UVC_NET, EPHYTO7UVC_NET(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
+      call post_data(CS%diag_ids%EPHYTO7UVC_NET, EPHYTO7UVC_NET_FLUX(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
           mask=G%mask2dT(is:ie,js:je))
 
     do j=js,je ; do i=is,ie
