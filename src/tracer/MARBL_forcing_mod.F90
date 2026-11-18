@@ -202,15 +202,15 @@ contains
     type(marbl_forcing_CS), pointer, intent(inout) :: CS                   !< A pointer that is set to point to
                                                                            !! control structure for MARBL forcing
     ! coupe added ephyto terms for uv inhibition
-    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO1UVA_NET_FLUX
-    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO1UVB_NET_FLUX
-    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO1UVC_NET_FLUX
-    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO5UVA_NET_FLUX
-    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO5UVB_NET_FLUX
-    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO5UVC_NET_FLUX
-    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO7UVA_NET_FLUX
-    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO7UVB_NET_FLUX
-    real, dimension(:,:,:), pointer, intent(in) :: EPHYTO7UVC_NET_FLUX
+    real, dimension(:,:), pointer, intent(in) :: EPHYTO1UVA_NET_FLUX
+    real, dimension(:,:), pointer, intent(in) :: EPHYTO1UVB_NET_FLUX
+    real, dimension(:,:), pointer, intent(in) :: EPHYTO1UVC_NET_FLUX
+    real, dimension(:,:), pointer, intent(in) :: EPHYTO5UVA_NET_FLUX
+    real, dimension(:,:), pointer, intent(in) :: EPHYTO5UVB_NET_FLUX
+    real, dimension(:,:), pointer, intent(in) :: EPHYTO5UVC_NET_FLUX
+    real, dimension(:,:), pointer, intent(in) :: EPHYTO7UVA_NET_FLUX
+    real, dimension(:,:), pointer, intent(in) :: EPHYTO7UVB_NET_FLUX
+    real, dimension(:,:), pointer, intent(in) :: EPHYTO7UVC_NET_FLUX
 
     integer :: i, j, is, ie, js, je, m
     real :: atm_fe_bioavail_frac     !< Fraction of iron from the atmosphere available for biological uptake [1]
