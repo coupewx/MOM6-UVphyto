@@ -233,6 +233,15 @@ type, public :: MARBL_tracers_CS ; private
   integer :: xco2_ind      !< index of MARBL forcing field array to copy CO2 flux into
   integer :: xco2_alt_ind  !< index of MARBL forcing field array to copy CO2 flux (alternate CO2) into
   integer :: d14c_ind      !< index of MARBL forcing field array to copy d14C into
+  integer :: ephyto1uva_ind
+  integer :: ephyto1uvb_ind
+  integer :: ephyto1uvc_ind
+  integer :: ephyto5uva_ind
+  integer :: ephyto5uvb_ind
+  integer :: ephyto5uvc_ind
+  integer :: ephyto7uva_ind
+  integer :: ephyto7uvb_ind
+  integer :: ephyto7uvc_ind
 
   !> external_field types for river fluxes (added to surface fluxes)
   type(external_field) :: id_din_riv     !< id for time_interp_external.
@@ -468,6 +477,15 @@ subroutine configure_MARBL_tracers(GV, US, param_file, CS)
   CS%atmpress_ind = -1
   CS%xco2_ind = -1
   CS%xco2_alt_ind = -1
+  CS%ephyto1uva_ind = -1
+  CS%ephyto1uvb_ind = -1
+  CS%ephyto1uvc_ind = -1
+  CS%ephyto5uva_ind = -1
+  CS%ephyto5uvb_ind = -1
+  CS%ephyto5uvc_ind = -1
+  CS%ephyto7uva_ind = -1
+  CS%ephyto7uvb_ind = -1
+  CS%ephyto7uvc_ind = -1
   do m=1,size(MARBL_instances%surface_flux_forcings)
     select case (trim(MARBL_instances%surface_flux_forcings(m)%metadata%varname))
       case('u10_sqr')
@@ -494,6 +512,24 @@ subroutine configure_MARBL_tracers(GV, US, param_file, CS)
         CS%xco2_alt_ind = m
       case('d14c')
         CS%d14c_ind = m
+      case('ephyto1uva')
+        CS%ephyto1uva_ind = m
+      case('ephyto1uvb')
+        CS%ephyto1uvb_ind = m
+      case('ephyto1uvc')
+        CS%ephyto1uvc_ind = m
+      case('ephyto5uva')
+        CS%ephyto5uva_ind = m
+      case('ephyto5uvb')
+        CS%ephyto5uvb_ind = m
+      case('ephyto5uvc')
+        CS%ephyto5uvc_ind = m
+      case('ephyto7uva')
+        CS%ephyto7uva_ind = m
+      case('ephyto7uvb')
+        CS%ephyto7uvb_ind = m
+      case('ephyto7uvc')
+        CS%ephyto7uvc_ind = m
       case DEFAULT
         write(log_message, "(A,1X,A)") &
             trim(MARBL_instances%surface_flux_forcings(m)%metadata%varname), &
@@ -1587,6 +1623,25 @@ subroutine MARBL_tracers_column_physics(h_old, ea, eb, fluxes, dt, G, GV, US, CS
 
       if (CS%d14c_ind > 0) &
         MARBL_instances%surface_flux_forcings(CS%d14c_ind)%field_0d(1) = CS%d14c(i,j)
+
+      if (CS%ephyto1uva_ind > 0) &
+        MARBL_instances%surface_flux_forcings(CS%ephyto1uva_ind)%field_0d(1) = CS%ephyto1uva(i,j)
+      if (CS%ephyto1uvb_ind > 0) &
+        MARBL_instances%surface_flux_forcings(CS%ephyto1uvb_ind)%field_0d(1) = CS%ephyto1uvb(i,j)
+      if (CS%ephyto1uvc_ind > 0) &
+        MARBL_instances%surface_flux_forcings(CS%ephyto1uvc_ind)%field_0d(1) = CS%ephyto1uvc(i,j)
+      if (CS%ephyto5uva_ind > 0) &
+        MARBL_instances%surface_flux_forcings(CS%ephyto5uva_ind)%field_0d(1) = CS%ephyto5uva(i,j)
+      if (CS%ephyto5uvb_ind > 0) &
+        MARBL_instances%surface_flux_forcings(CS%ephyto5uvb_ind)%field_0d(1) = CS%ephyto5uvb(i,j)
+      if (CS%ephyto5uvc_ind > 0) &
+        MARBL_instances%surface_flux_forcings(CS%ephyto5uvc_ind)%field_0d(1) = CS%ephyto5uvc(i,j)
+      if (CS%ephyto7uva_ind > 0) &
+        MARBL_instances%surface_flux_forcings(CS%ephyto7uva_ind)%field_0d(1) = CS%ephyto7uva(i,j)
+      if (CS%ephyto7uvb_ind > 0) &
+        MARBL_instances%surface_flux_forcings(CS%ephyto7uvb_ind)%field_0d(1) = CS%ephyto7uvb(i,j)
+      if (CS%ephyto7uvc_ind > 0) &
+        MARBL_instances%surface_flux_forcings(CS%ephyto7uvc_ind)%field_0d(1) = CS%ephyto7uvc(i,j)
 
       !     * tracers at surface
       !       TODO: average over some shallow depth (e.g. 5m)
