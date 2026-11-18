@@ -28,14 +28,29 @@ implicit none ; private
 public :: MARBL_forcing_init
 public :: convert_driver_fields_to_forcings
 
-!> Data type used to store diagnostic index returned from register_diag_field()
-!! For the forcing fields that can be written via post_data()
-type, private :: marbl_forcing_diag_ids
-  integer :: atm_fine_dust   !< Atmospheric fine dust component of dust_flux
-  integer :: atm_coarse_dust !< Atmospheric coarse dust component of dust_flux
-  integer :: atm_bc          !< Atmospheric black carbon component of iron_flux
-  integer :: ice_dust        !< Sea-ice dust component of dust_flux
-  integer :: ice_bc          !< Sea-ice black carbon component of iron_flux
+!> Control structure for this module
+type, public :: marbl_forcing_CS ; private
+  type(diag_ctrl), pointer :: diag => NULL() !< A structure that is used to
+                                             !! regulate the timing of diagnostic output.
+
+  real    :: dust_ratio_thres               !< coarse/fine dust ratio threshold [1]
+  real    :: min_dust_ratio                 !< minimum value for dust ratio [1]
+  real    :: dust_ratio_offset              !< offset for dust ratio [1]
+  real    :: fe_bioavail_frac_offset        !< offset for iron bioavailability fraction [1]
+  real    :: atm_fe_to_bc_ratio             !< atmospheric iron to black carbon ratio [1]
+  real    :: seaice_fe_to_bc_ratio          !< sea-ice iron to black carbon ratio [1]
+  real    :: iron_frac_in_atm_fine_dust     !< Fraction of fine dust from the atmosphere that is iron [1]
+  real    :: iron_frac_in_atm_coarse_dust   !< Fraction of coarse dust from the atmosphere that is iron [1]
+  real    :: iron_frac_in_seaice_dust       !< Fraction of dust from the sea ice that is iron [1]
+  real    :: atm_co2_const                  !< atmospheric CO2 (if specifying a constant value) [ppm]
+  real    :: atm_alt_co2_const              !< alternate atmospheric CO2 for _ALT_CO2 tracers
+                                            !! (if specifying a constant value) [ppm]
+
+  logical :: use_MARBL_tracers    !< most functions can return immediately
+                                  !! MARBL tracers are turned off
+  integer :: atm_co2_iopt         !< Integer version of atm_co2_opt, which determines source of atm_co2
+  integer :: atm_alt_co2_iopt     !< Integer version of atm_alt_co2_opt, which determines source of atm_alt_co2
+
   ! COUPE ADDED EPHYTO{1,6,7}UV{A,B,C}_NET
   integer :: EPHYTO1UVA_NET
   integer :: EPHYTO1UVB_NET
@@ -47,7 +62,7 @@ type, private :: marbl_forcing_diag_ids
   integer :: EPHYTO7UVB_NET
   integer :: EPHYTO7UVC_NET
 
-end type marbl_forcing_diag_ids
+end type marbl_forcing_CS
 
 !> Control structure for this module
 type, public :: marbl_forcing_CS ; private
@@ -167,57 +182,6 @@ contains
           default=284.317, units="ppm")
     endif
 
-    ! Register diagnostic fields for outputing forcing values
-    ! These fields are posted from convert_driver_fields_to_forcings(), and they are received
-    ! in physical units so no conversion is necessary here.
-    CS%diag_ids%atm_fine_dust = register_diag_field("ocean_model", "ATM_FINE_DUST_FLUX_CPL", &
-        CS%diag%axesT1, & ! T=> tracer grid? 1 => no vertical grid
-        day, "ATM_FINE_DUST_FLUX from cpl", "kg/m^2/s")
-    CS%diag_ids%atm_coarse_dust = register_diag_field("ocean_model", "ATM_COARSE_DUST_FLUX_CPL", &
-        CS%diag%axesT1, & ! T=> tracer grid? 1 => no vertical grid
-        day, "ATM_COARSE_DUST_FLUX from cpl", "kg/m^2/s")
-    CS%diag_ids%atm_bc = register_diag_field("ocean_model", "ATM_BLACK_CARBON_FLUX_CPL", &
-        CS%diag%axesT1, & ! T=> tracer grid? 1 => no vertical grid
-        day, "ATM_BLACK_CARBON_FLUX from cpl",  "kg/m^2/s")
-
-    CS%diag_ids%ice_dust = register_diag_field("ocean_model", "SEAICE_DUST_FLUX_CPL", &
-        CS%diag%axesT1, & ! T=> tracer grid? 1 => no vertical grid
-        day, "SEAICE_DUST_FLUX from cpl", "kg/m^2/s")
-    CS%diag_ids%ice_bc = register_diag_field("ocean_model", "SEAICE_BLACK_CARBON_FLUX_CPL", &
-        CS%diag%axesT1, & ! T=> tracer grid? 1 => no vertical grid
-        day, "SEAICE_BLACK_CARBON_FLUX from cpl", "kg/m^2/s")
-
-! COUPE ADDED EPHYTO{1,6,7}UV{A,B,C}_NET
-    CS%diag_ids%EPHYTO1UVA_NET = register_diag_field("ocean_model", "ATM_EPHYTO1UVA_NET_CPL", &
-        CS%diag%axesT1, & ! T=> tracer grid? 1 => no vertical grid
-        day, "ATM_EPHYTO1UVA_NET_CPL from cpl",  "unitless")
-    CS%diag_ids%EPHYTO1UVB_NET = register_diag_field("ocean_model", "ATM_EPHYTO1UVB_NET_CPL", &
-        CS%diag%axesT1, & ! T=> tracer grid? 1 => no vertical grid
-        day, "ATM_EPHYTO1UVB_NET_CPL from cpl",  "unitless")
-    CS%diag_ids%EPHYTO1UVC_NET = register_diag_field("ocean_model", "ATM_EPHYTO1UVC_NET_CPL", &
-        CS%diag%axesT1, & ! T=> tracer grid? 1 => no vertical grid
-        day, "ATM_EPHYTO1UVC_NET_CPL from cpl",  "unitless")
-
-    CS%diag_ids%EPHYTO6UVA_NET = register_diag_field("ocean_model", "ATM_EPHYTO6UVA_NET_CPL", &
-        CS%diag%axesT1, & ! T=> tracer grid? 1 => no vertical grid
-        day, "ATM_EPHYTO6UVA_NET_CPL from cpl",  "unitless")
-    CS%diag_ids%EPHYTO6UVB_NET = register_diag_field("ocean_model", "ATM_EPHYTO6UVB_NET_CPL", &
-        CS%diag%axesT1, & ! T=> tracer grid? 1 => no vertical grid
-        day, "ATM_EPHYTO6UVB_NET_CPL from cpl",  "unitless")
-    CS%diag_ids%EPHYTO6UVC_NET = register_diag_field("ocean_model", "ATM_EPHYTO6UVC_NET_CPL", &
-        CS%diag%axesT1, & ! T=> tracer grid? 1 => no vertical grid
-        day, "ATM_EPHYTO6UVC_NET_CPL from cpl",  "unitless")
-
-    CS%diag_ids%EPHYTO7UVA_NET = register_diag_field("ocean_model", "ATM_EPHYTO7UVA_NET_CPL", &
-        CS%diag%axesT1, & ! T=> tracer grid? 1 => no vertical grid
-        day, "ATM_EPHYTO7UVA_NET_CPL from cpl",  "unitless")
-    CS%diag_ids%EPHYTO7UVB_NET = register_diag_field("ocean_model", "ATM_EPHYTO7UVB_NET_CPL", &
-        CS%diag%axesT1, & ! T=> tracer grid? 1 => no vertical grid
-        day, "ATM_EPHYTO7UVB_NET_CPL from cpl",  "unitless")
-    CS%diag_ids%EPHYTO7UVC_NET = register_diag_field("ocean_model", "ATM_EPHYTO7UVC_NET_CPL", &
-        CS%diag%axesT1, & ! T=> tracer grid? 1 => no vertical grid
-        day, "ATM_EPHYTO7UVC_NET_CPL from cpl",  "unitless")
-
   end subroutine MARBL_forcing_init
 
   ! Note: ice fraction and u10_sqr are handled in mom_surface_forcing because of CFCs
@@ -273,9 +237,6 @@ contains
     real, dimension(:,:,:), pointer, intent(in) :: EPHYTO7UVB_NET_FLUX
     real, dimension(:,:,:), pointer, intent(in) :: EPHYTO7UVC_NET_FLUX
 
-
-
-
     integer :: i, j, is, ie, js, je, m
     real :: atm_fe_bioavail_frac     !< Fraction of iron from the atmosphere available for biological uptake [1]
     real :: dust_ratio               !< Ratio of coarse to fine dust from the atmosphere [1]
@@ -293,56 +254,6 @@ contains
     ndep_conversion = (1.e6/14.) * (US%m_to_Z * US%T_to_s)
     iron_flux_conversion = (1.e6 / molw_Fe) * (US%m_to_Z * US%T_to_s)
 
-    ! Post fields from coupler to diagnostics
-    ! TODO: units from diag register are incorrect; we should be converting these in the cap, I think
-    if (CS%diag_ids%atm_fine_dust > 0) &
-      call post_data(CS%diag_ids%atm_fine_dust, atm_fine_dust_flux(is-i0:ie-i0,js-j0:je-j0), &
-          CS%diag, mask=G%mask2dT(is:ie,js:je))
-    if (CS%diag_ids%atm_coarse_dust > 0) &
-      call post_data(CS%diag_ids%atm_coarse_dust, atm_coarse_dust_flux(is-i0:ie-i0,js-j0:je-j0), &
-          CS%diag, mask=G%mask2dT(is:ie,js:je))
-    if (CS%diag_ids%atm_bc > 0) &
-      call post_data(CS%diag_ids%atm_bc, atm_bc_flux(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
-          mask=G%mask2dT(is:ie,js:je))
-    if (CS%diag_ids%ice_dust > 0) &
-      call post_data(CS%diag_ids%ice_dust, seaice_dust_flux(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
-          mask=G%mask2dT(is:ie,js:je))
-    if (CS%diag_ids%ice_bc > 0) &
-      call post_data(CS%diag_ids%ice_bc, seaice_bc_flux(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
-          mask=G%mask2dT(is:ie,js:je))
-
-! COUPE ADDED EPHYTO TERMS FOR UV INHIBITION
-    if (CS%diag_ids%EPHYTO1UVA_NET > 0) &
-      call post_data(CS%diag_ids%EPHYTO1UVA_NET, EPHYTO1UVA_NET_FLUX(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
-          mask=G%mask2dT(is:ie,js:je))
-    if (CS%diag_ids%EPHYTO1UVB_NET > 0) &
-      call post_data(CS%diag_ids%EPHYTO1UVB_NET, EPHYTO1UVA_NET_FLUX(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
-          mask=G%mask2dT(is:ie,js:je))
-    if (CS%diag_ids%EPHYTO1UVC_NET > 0) &
-      call post_data(CS%diag_ids%EPHYTO1UVC_NET, EPHYTO1UVC_NET_FLUX(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
-          mask=G%mask2dT(is:ie,js:je))
-
-! COUPE ADDED EPHYTO TERMS FOR UV INHIBITION
-    if (CS%diag_ids%EPHYTO6UVA_NET > 0) &
-      call post_data(CS%diag_ids%EPHYTO6UVA_NET, EPHYTO6UVA_NET_FLUX(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
-          mask=G%mask2dT(is:ie,js:je))
-    if (CS%diag_ids%EPHYTO6UVB_NET > 0) &
-      call post_data(CS%diag_ids%EPHYTO6UVB_NET, EPHYTO6UVA_NET_FLUX(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
-          mask=G%mask2dT(is:ie,js:je))
-    if (CS%diag_ids%EPHYTO6UVC_NET > 0) &
-      call post_data(CS%diag_ids%EPHYTO6UVC_NET, EPHYTO6UVC_NET_FLUX(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
-          mask=G%mask2dT(is:ie,js:je))
-
-! COUPE ADDED EPHYTO TERMS FOR UV INHIBITION
-    if (CS%diag_ids%EPHYTO7UVA_NET > 0) &
-      call post_data(CS%diag_ids%EPHYTO7UVA_NET, EPHYTO7UVA_NET_FLUX(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
-          mask=G%mask2dT(is:ie,js:je))
-    if (CS%diag_ids%EPHYTO7UVB_NET > 0) &
-      call post_data(CS%diag_ids%EPHYTO7UVB_NET, EPHYTO7UVA_NET_FLUX(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
-          mask=G%mask2dT(is:ie,js:je))
-    if (CS%diag_ids%EPHYTO7UVC_NET > 0) &
-      call post_data(CS%diag_ids%EPHYTO7UVC_NET, EPHYTO7UVC_NET_FLUX(is-i0:ie-i0,js-j0:je-j0), CS%diag, &
-          mask=G%mask2dT(is:ie,js:je))
 
     do j=js,je ; do i=is,ie
       ! Components of dust flux
@@ -357,6 +268,17 @@ contains
       ! Nitrogen Deposition
       fluxes%nhx_dep(i,j) = (G%mask2dT(i,j) * ndep_conversion) * nhx_dep(i-i0,j-j0)
       fluxes%noy_dep(i,j) = (G%mask2dT(i,j) * ndep_conversion) * noy_dep(i-i0,j-j0)
+
+     ! UV inhibition
+     fluxes%EPHYTO1UVA_NET_FLUX = (G%mask2dT(i,j)) * EPHYTO1UVA_NET_FLUX(i-i0,j-j0)
+     fluxes%EPHYTO1UVB_NET_FLUX = (G%mask2dT(i,j)) * EPHYTO1UVB_NET_FLUX(i-i0,j-j0)
+     fluxes%EPHYTO1UVC_NET_FLUX = (G%mask2dT(i,j)) * EPHYTO1UVC_NET_FLUX(i-i0,j-j0)
+     fluxes%EPHYTO5UVA_NET_FLUX = (G%mask2dT(i,j)) * EPHYTO5UVA_NET_FLUX(i-i0,j-j0)
+     fluxes%EPHYTO5UVB_NET_FLUX = (G%mask2dT(i,j)) * EPHYTO5UVB_NET_FLUX(i-i0,j-j0)
+     fluxes%EPHYTO5UVC_NET_FLUX = (G%mask2dT(i,j)) * EPHYTO5UVC_NET_FLUX(i-i0,j-j0)
+     fluxes%EPHYTO7UVA_NET_FLUX = (G%mask2dT(i,j)) * EPHYTO7UVA_NET_FLUX(i-i0,j-j0)
+     fluxes%EPHYTO7UVB_NET_FLUX = (G%mask2dT(i,j)) * EPHYTO7UVB_NET_FLUX(i-i0,j-j0)
+     fluxes%EPHYTO7UVC_NET_FLUX = (G%mask2dT(i,j)) * EPHYTO7UVC_NET_FLUX(i-i0,j-j0)
     enddo ; enddo
 
     ! Atmospheric CO2
